@@ -5,7 +5,7 @@ const auth = require("./auth");
 
 router.use("/", (req, res) => {
     res.json({
-        message : "success"
+        message : "mal eup"
     });
   });
 
