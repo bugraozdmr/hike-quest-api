@@ -22,6 +22,7 @@ const register = asyncErrorWrapper(async(req,res,next) => {
         password
     });
 
+
     sendJwtToClient(user,res);
 
     // artık bu çözlünce bilgi gelir
