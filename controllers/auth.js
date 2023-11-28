@@ -15,6 +15,7 @@ const register = asyncErrorWrapper(async(req,res,next) => {
     //  pm.environment.set("access_token", object.access_token);
     const {name,surname,email,password} = req.body;
 
+    
     const user = await User.create({
         name,
         surname,
