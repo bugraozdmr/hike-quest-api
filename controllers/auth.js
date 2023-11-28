@@ -57,17 +57,13 @@ const login = asyncErrorWrapper(async(req,res,next) => {
     
 
     const {email,password} = req.body;
-    
-    console.log(password," ",email);
 
     if(!ValidateUserInput(email,password)){
         return next(new CustomError("missing argument/s"));
     }
 
-    
-
     const user = await User.findOne({email}).select("+password");
-    
+
     if(!user){
         return next(new CustomError("user not exist",400));
     }
@@ -76,7 +72,7 @@ const login = asyncErrorWrapper(async(req,res,next) => {
     if(!comparePassword(password,user.password)) {
         return next(new CustomError("password or email wrong",400));
     }
-    
+
     // tokeni guncellemek için
     sendJwtToClient(user,res);
 });
