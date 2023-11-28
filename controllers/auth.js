@@ -28,15 +28,26 @@ const register = asyncErrorWrapper(async(req,res,next) => {
 
     // artık bu çözlünce bilgi gelir
 });
-// todo silinecek galiba
-const getUser = (req,res,next)=>{
-    res.json({
-        success: true,
-        data : {
-            id : req.user.id,
-            name : req.user.name
-        }
-    })
+
+
+// todo silinecek galiba yeri değişebilir admin access'i bu
+// todo sonrasında query kullanarak sıralama işlemleri yazılacak
+const getAllUser = async (req,res,next)=>{
+    
+    try{
+        const users = await User.find();
+
+        res.json({
+            success: true,
+            data : {
+                users
+                
+            }
+        });
+    }
+    catch (error){
+        next(error);
+    }
 };
 
 const login = asyncErrorWrapper(async(req,res,next) => {
@@ -172,7 +183,7 @@ const editDetails = asyncErrorWrapper(async(req,res,next) => {
 
 module.exports = {
     register,
-    getUser,
+    getAllUser,
     login,
     logout,
     editDetails

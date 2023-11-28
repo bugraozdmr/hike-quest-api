@@ -2,7 +2,7 @@ const express = require("express");
 
 const {
     register ,
-    getUser,
+    getAllUser,
     login,
     logout,
     editDetails
@@ -17,7 +17,8 @@ router.get("/",(req,res) => {
 });
 
 router.post("/register",register);
-router.get("/profile",getAccessToRoute,getUser);
+//todo auth iste erişim isteği için
+router.get("/getAllUser",getAllUser);
 router.post("/login",login);
 // getAccessToRouter login olmuşmuyuz durumunu kontrol eder
 router.get("/logout",getAccessToRoute,logout);
