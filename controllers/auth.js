@@ -54,19 +54,29 @@ const login = asyncErrorWrapper(async(req,res,next) => {
     //postman test
     //var object = pm.response.json();
     //pm.environment.set("access_token", object.access_token);
+    
+
     const {email,password} = req.body;
+    
+    console.log(password," ",email);
 
     if(!ValidateUserInput(email,password)){
         return next(new CustomError("missing argument/s"));
     }
 
+    
+
     const user = await User.findOne({email}).select("+password");
+    
+    if(!user){
+        return next(new CustomError("user not exist",400));
+    }
 
     // - !false = true
     if(!comparePassword(password,user.password)) {
         return next(new CustomError("password or email wrong",400));
     }
-
+    
     // tokeni guncellemek için
     sendJwtToClient(user,res);
 });
