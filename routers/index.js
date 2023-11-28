@@ -4,10 +4,10 @@ const router = express.Router();
 const auth = require("./auth");
 
 router.use("/", (req, res) => {
-    res.json({
-        message : "home page"
-    });
+  res.json({
+      message : "api access only for devs"
   });
+});
 
 router.use("/auth",auth);
 

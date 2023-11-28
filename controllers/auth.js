@@ -7,7 +7,7 @@ const {ValidateUserInput , comparePassword} = require("../helpers/input/inputHel
 
 
 
-
+// todo  Burda yapılan çoğu işlem frontendde nasıl kullanılacağı hangi parametreler ile çalıştığı vs söylenmeli
 
 const register = asyncErrorWrapper(async(req,res,next) => {
     //postman test
@@ -74,6 +74,82 @@ const logout = asyncErrorWrapper(async(req,res,next) => {
     });
 });
 
+const forgotPassword = asyncErrorWrapper(async(req,res,next) => {
+    const resetEmail = req.body.email;
+    // beklemezse promise olarak kalır ve !user felan görmez tipi farklı
+    const user = await User.findOne({email : resetEmail});
+
+    if(!user) {
+        return next(new CustomError("There is no user with that email",400));
+    }
+
+    const resetPasswordToken = user.getResetPasswordTokenFromUser();
+
+    // tekrardan save ediliyor en sonda ve bekleniyor
+    await user.save();
+
+    const resetPasswordUrl = `http://localhost:5000/api/auth/resetpassword?resetPasswordToken=${resetPasswordToken}`;
+
+    const emailTemplate = `
+        <h3>Reset Your Password</h3>
+        <p> This <a href = "${resetPasswordUrl} target="_blank">link</a> will expire in 1 hour </p>
+    `;
+
+    try{
+        await sendEmail({
+            from : process.env.SMTP_USER,
+            to : resetEmail,
+            subject : "Reset your password",
+            html : emailTemplate
+        });
+
+        return res.status(200).json({
+            success : true,
+            message : "token sent to your email",
+        });
+    }
+    // hata varsa resetPassword token ve expire geri alınmalı
+    catch (error){
+        // yollarken sorun oluşursa yani zaten emaili seçti o aşama geçti sonrasında hata olursa undefined yapcak
+        user.resetPasswordToken = undefined;
+        user.resetPasswordTokenExpire = undefined;
+
+        await user.save();
+        
+        return next(new CustomError("Email could not be sent",500));
+    }
+});
+
+const resetPassword = asyncErrorWrapper(async(req,res,next) => {
+    //query parametreleri linkten alınıyor
+    const {resetPasswordToken} = req.query;
+    const {password} = req.body;
+
+    if(!resetPasswordToken){
+        return next(new CustomError("Token doesn't exist",400));
+    }
+    let user = await User.findOne({     // gt : greaterthan daha buyuk olsun expire olmamış olsun
+        resetPasswordToken : resetPasswordToken,
+        resetPasswordTokenExpire : {$gt : Date.now()}
+    });
+    
+    if(!user) {
+        return next(new CustomError("Invalid Token or Session Expired",400));
+    }
+
+    user.password = password;
+
+    user.resetPasswordToken = undefined;
+    user.resetPasswordTokenExpire = undefined;
+
+    await user.save();
+
+    return res.status(200)
+    .json({
+        success : true,
+        message : "password reset complete"
+    });
+});
 
 const editDetails = asyncErrorWrapper(async(req,res,next) => {
     const editInformation = req.body;
