@@ -7,7 +7,8 @@ const {
     logout,
     editDetails,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    activateAccount
 } = require("../controllers/auth");
 
 const {getAccessToRoute} = require("../middleWares/authorization/auth");
@@ -27,7 +28,7 @@ router.get("/logout",getAccessToRoute,logout);
 
 router.post("/forgotpassword",forgotPassword);
 router.put("/resetpassword",resetPassword);
-router.post("/activate",)
+router.post("/activate",activateAccount);
 
 //* dummy func yine -- art arda iki response olmaz
 router.put("/edit",[getAccessToRoute,()=> console.log()],editDetails);

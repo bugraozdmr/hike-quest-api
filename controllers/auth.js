@@ -25,22 +25,25 @@ const register = asyncErrorWrapper(async(req,res,next) => {
 
     //* sending email
 
-
+    
     // bu method useri değiştirdiğinden save edilecek sonda
     const ActivatePasswordToken = user.getActivatePasswordToken();
 
+    console.log(ActivatePasswordToken);
+
+    // patladı
     await user.save();
 
 
     activateAccountUrl = `http://localhost:5000/api/auth/activate?activatePasswordToken=${ActivatePasswordToken}`
     
-
+    
     const emailTemplate = `
         <h3>Hey ${name}</h3>
         <p> Click this <a href = "${activateAccountUrl} target="_blank">link</a> to activate your account</p>
     `;
 
-
+    
     try{
         await sendEmail({
             from : process.env.SMTP_USER,
@@ -49,16 +52,17 @@ const register = asyncErrorWrapper(async(req,res,next) => {
             html : emailTemplate
         });
 
-        //! muhtemel hata çift response dönecek
+        
         return res.status(200).json({
             success : true,
-            message : "token sent to your email",
+            message : "message sent to your email",
         });
     }
     // hata varsa resetPassword token ve expire geri alınmalı
     catch (error){
         // yollarken sorun oluşursa yani zaten emaili seçti o aşama geçti sonrasında hata olursa undefined yapcak
-        
+        user.ActivatePasswordToken = undefined;
+        user.ActivatePasswordTokenExpire = undefined;
 
         await user.save();
         
@@ -76,14 +80,16 @@ const register = asyncErrorWrapper(async(req,res,next) => {
 
 const activateAccount = asyncErrorWrapper(async(req,res,next) => {
     // parametre değerleri query'de
-    const {activatePasswordToken} = req.query.activatePasswordToken;
+    const {activatePasswordToken} = req.query;
+
+    console.log(activatePasswordToken);
 
     if(!activatePasswordToken) {
         return next(new CustomError("Token not exist",400));
     }
 
     let user = await User.findOne({
-        ActivatePasswordToken : activateAccount,
+        ActivatePasswordToken : activatePasswordToken,
         ActivatePasswordTokenExpire : {$gt : Date.now()}
     });
 
@@ -293,5 +299,6 @@ module.exports = {
     logout,
     editDetails,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    activateAccount
 };

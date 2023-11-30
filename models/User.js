@@ -57,7 +57,7 @@ const UserSchema = new Schema({
         type : Date
     },
     ActivatePasswordToken : {
-        type : Date
+        type : String
     },
     ActivatePasswordTokenExpire : {
         type : Date
@@ -91,11 +91,13 @@ UserSchema.methods.getActivatePasswordToken = function(){
     const randomHexString = crypto.randomBytes(15).toString("hex");
     
     const {ACTIVATE_PASSWORD_EXPIRE} = process.env;
-
+    
     const activatePasswordToken = crypto
     .createHash("SHA256")
     .update(randomHexString)
     .digest("hex");
+    
+    // console.log(`activate token : ${activatePasswordToken}`);
 
     this.ActivatePasswordToken = activatePasswordToken;
     // 1 saat surecek 3600000 ms
@@ -104,7 +106,7 @@ UserSchema.methods.getActivatePasswordToken = function(){
     //* token ve expire time dönüyor
     // console.log(this.resetPasswordToken);
     // console.log(this.resetPasswordTokenExpire);
-    return ActivatePasswordToken;
+    return activatePasswordToken;
 }
 
 
