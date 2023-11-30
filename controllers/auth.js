@@ -14,7 +14,6 @@ const register = asyncErrorWrapper(async(req,res,next) => {
     //  var object = pm.response.json();
     //  pm.environment.set("access_token", object.access_token);
     const {name,surname,email,password} = req.body;
-
     
     const user = await User.create({
         name,
@@ -22,6 +21,43 @@ const register = asyncErrorWrapper(async(req,res,next) => {
         email,
         password
     });
+
+    //* sending email
+
+    //activateAccountUrl = 
+
+
+    const emailTemplate = `
+        <h3>Hey ${name}</h3>
+        <p> Click this <a href = "${activateAccountUrl} target="_blank">link</a> to activate your account</p>
+    `;
+
+
+    try{
+        await sendEmail({
+            from : process.env.SMTP_USER,
+            to : email,
+            subject : "Activate your Account",
+            html : emailTemplate
+        });
+
+        //! muhtemel hata çift response dönecek
+        return res.status(200).json({
+            success : true,
+            message : "token sent to your email",
+        });
+    }
+    // hata varsa resetPassword token ve expire geri alınmalı
+    catch (error){
+        // yollarken sorun oluşursa yani zaten emaili seçti o aşama geçti sonrasında hata olursa undefined yapcak
+        
+
+        await user.save();
+        
+        return next(new CustomError("Email could not be sent",500));
+    }
+
+
 
 
     sendJwtToClient(user,res);
@@ -49,6 +85,12 @@ const getAllUser = async (req,res,next)=>{
         next(error);
     }
 };
+
+const activateAccount = asyncErrorWrapper(async(req,res,next) => {
+    
+});
+
+
 
 const login = asyncErrorWrapper(async(req,res,next) => {
     //postman test

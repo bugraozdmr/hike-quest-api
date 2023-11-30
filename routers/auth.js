@@ -27,6 +27,7 @@ router.get("/logout",getAccessToRoute,logout);
 
 router.post("/forgotpassword",forgotPassword);
 router.put("/resetpassword",resetPassword);
+router.post("/activate",)
 
 //* dummy func yine -- art arda iki response olmaz
 router.put("/edit",[getAccessToRoute,()=> console.log()],editDetails);

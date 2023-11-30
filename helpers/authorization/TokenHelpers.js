@@ -14,6 +14,7 @@ const sendJwtToClient = (user,res) => {
     })
     .json({
         success : true,
+        message : "please activate your account before log in",
         access_token : token,
         data : {
             name : user.name,

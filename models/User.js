@@ -29,6 +29,10 @@ const UserSchema = new Schema({
         required : [true,"password needed"],
         select : false
     },
+    active : {
+        type : Boolean,
+        default : false
+    },
     location : {
         type : String,
     },
