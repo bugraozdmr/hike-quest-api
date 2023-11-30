@@ -22,10 +22,18 @@ const register = asyncErrorWrapper(async(req,res,next) => {
         password
     });
 
+
     //* sending email
 
-    //activateAccountUrl = 
 
+    // bu method useri değiştirdiğinden save edilecek sonda
+    const ActivatePasswordToken = user.getActivatePasswordToken();
+
+    await user.save();
+
+
+    activateAccountUrl = `http://localhost:5000/api/auth/activate?activatePasswordToken=${ActivatePasswordToken}`
+    
 
     const emailTemplate = `
         <h3>Hey ${name}</h3>
@@ -66,6 +74,42 @@ const register = asyncErrorWrapper(async(req,res,next) => {
 });
 
 
+const activateAccount = asyncErrorWrapper(async(req,res,next) => {
+    // parametre değerleri query'de
+    const {activatePasswordToken} = req.query.activatePasswordToken;
+
+    if(!activatePasswordToken) {
+        return next(new CustomError("Token not exist",400));
+    }
+
+    let user = await User.findOne({
+        ActivatePasswordToken : activateAccount,
+        ActivatePasswordTokenExpire : {$gt : Date.now()}
+    });
+
+    if(!user) {
+        return next(new CustomError("User doesn't exist"));
+    }
+
+    user.active = true;
+
+    user.activatePasswordToken = undefined;
+    user.ActivatePasswordTokenExpire = undefined;
+
+    await user.save();
+
+    return res.status(200).json({
+        success : true,
+        message : "account activated",
+        data : {
+            email : user.email,
+            active : user.activate
+        }
+    });
+});
+
+
+
 // todo silinecek galiba yeri değişebilir admin access'i bu
 // todo sonrasında query kullanarak sıralama işlemleri yazılacak
 const getAllUser = async (req,res,next)=>{
@@ -86,9 +130,7 @@ const getAllUser = async (req,res,next)=>{
     }
 };
 
-const activateAccount = asyncErrorWrapper(async(req,res,next) => {
-    
-});
+
 
 
 
