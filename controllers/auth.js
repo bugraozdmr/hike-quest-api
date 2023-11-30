@@ -94,6 +94,9 @@ const logout = asyncErrorWrapper(async(req,res,next) => {
 
 const forgotPassword = asyncErrorWrapper(async(req,res,next) => {
     const resetEmail = req.body.email;
+
+    console.log(resetEmail);
+
     // beklemezse promise olarak kalır ve !user felan görmez tipi farklı
     const user = await User.findOne({email : resetEmail});
 
@@ -192,5 +195,7 @@ module.exports = {
     getAllUser,
     login,
     logout,
-    editDetails
+    editDetails,
+    forgotPassword,
+    resetPassword
 };
