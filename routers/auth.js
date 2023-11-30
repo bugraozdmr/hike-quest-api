@@ -5,7 +5,9 @@ const {
     getAllUser,
     login,
     logout,
-    editDetails
+    editDetails,
+    forgotPassword,
+    resetPassword
 } = require("../controllers/auth");
 
 const {getAccessToRoute} = require("../middleWares/authorization/auth");
@@ -22,6 +24,9 @@ router.get("/getAllUser",getAllUser);
 router.post("/login",login);
 // getAccessToRouter login olmuşmuyuz durumunu kontrol eder
 router.get("/logout",getAccessToRoute,logout);
+
+router.post("/forgotpassword",forgotPassword);
+router.put("/resetpassword",resetPassword);
 
 //* dummy func yine -- art arda iki response olmaz
 router.put("/edit",[getAccessToRoute,()=> console.log()],editDetails);

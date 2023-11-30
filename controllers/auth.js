@@ -95,10 +95,10 @@ const logout = asyncErrorWrapper(async(req,res,next) => {
 const forgotPassword = asyncErrorWrapper(async(req,res,next) => {
     const resetEmail = req.body.email;
 
-    console.log(resetEmail);
 
     // beklemezse promise olarak kalır ve !user felan görmez tipi farklı
     const user = await User.findOne({email : resetEmail});
+    
 
     if(!user) {
         return next(new CustomError("There is no user with that email",400));
@@ -107,7 +107,11 @@ const forgotPassword = asyncErrorWrapper(async(req,res,next) => {
     const resetPasswordToken = user.getResetPasswordTokenFromUser();
 
     // tekrardan save ediliyor en sonda ve bekleniyor
+    //? yukardaki getResetPasswordTokenFromUser üzerinden resetpassword token ataması yapılıyor
+    //? save edilmesi burda yapılmış ordada yapılabilirdi
     await user.save();
+
+    // console.log(user.resetPasswordToken);
 
     const resetPasswordUrl = `http://localhost:5000/api/auth/resetpassword?resetPasswordToken=${resetPasswordToken}`;
 
@@ -144,8 +148,13 @@ const forgotPassword = asyncErrorWrapper(async(req,res,next) => {
 const resetPassword = asyncErrorWrapper(async(req,res,next) => {
     //query parametreleri linkten alınıyor
     const {resetPasswordToken} = req.query;
+    //todo sonradan alınacak bu değer uçacak
     const {password} = req.body;
 
+    console.log(resetPasswordToken,password);
+    //todo
+    // http://localhost:5000/api/auth/resetpassword?resetPasswordToken=f2ad1cdd398d4e8cc963178f6f95e93e6c53fcf2df43d64529d0c1cfbce952cd%20target=
+    //! %20target= silinmesi gerek yoksa çalışmıyor direkt blank olmadan çalıştır
     if(!resetPasswordToken){
         return next(new CustomError("Token doesn't exist",400));
     }
@@ -154,7 +163,10 @@ const resetPassword = asyncErrorWrapper(async(req,res,next) => {
         resetPasswordTokenExpire : {$gt : Date.now()}
     });
     
+    
+
     if(!user) {
+        
         return next(new CustomError("Invalid Token or Session Expired",400));
     }
 

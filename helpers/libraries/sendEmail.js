@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const User = require("../../models/User");
 
 const sendEmail = async(mailOptions) => {
 
@@ -13,7 +14,6 @@ const sendEmail = async(mailOptions) => {
 
     let info = await transporter.sendMail(mailOptions);
     console.log(`Message sent : ${info.messageId}`);
-
 
 }
 

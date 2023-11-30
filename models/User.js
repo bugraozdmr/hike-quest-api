@@ -56,6 +56,7 @@ const UserSchema = new Schema({
 
 
 UserSchema.methods.getResetPasswordTokenFromUser = function(){
+    // working fine
     const randomHexString = crypto.randomBytes(15).toString("hex");
     
     const {RESET_PASSWORD_EXPIRE} = process.env;
@@ -69,6 +70,9 @@ UserSchema.methods.getResetPasswordTokenFromUser = function(){
     // 1 saat surecek 3600000 ms
     this.resetPasswordTokenExpire = Date.now() + parseInt(RESET_PASSWORD_EXPIRE);
 
+    //* token ve expire time dönüyor
+    // console.log(this.resetPasswordToken);
+    // console.log(this.resetPasswordTokenExpire);
     return resetPasswordToken;
 }
 
