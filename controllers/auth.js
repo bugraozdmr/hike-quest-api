@@ -98,6 +98,9 @@ const activateAccount = asyncErrorWrapper(async(req,res,next) => {
     }
 
     user.active = true;
+    user.ActivatePasswordToken = undefined;
+    user.ActivatePasswordTokenExpire = undefined;
+
 
     user.activatePasswordToken = undefined;
     user.ActivatePasswordTokenExpire = undefined;
