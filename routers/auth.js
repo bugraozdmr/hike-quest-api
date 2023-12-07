@@ -34,6 +34,6 @@ router.post("/activate",activateAccount);
 router.delete("/deleteuser",[getAccessToRoute,()=> console.log()],deleteUser);
 
 //* dummy func yine -- art arda iki response olmaz
-router.put("/edit",[getAccessToRoute,()=> console.log()],editDetails);
+router.put("/edituser",[getAccessToRoute,()=> console.log()],editDetails);
 
 module.exports = router;
