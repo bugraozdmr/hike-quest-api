@@ -82,7 +82,6 @@ const activateAccount = asyncErrorWrapper(async(req,res,next) => {
     // parametre değerleri query'de
     const {activatePasswordToken} = req.query;
 
-    console.log(activatePasswordToken);
 
     if(!activatePasswordToken) {
         return next(new CustomError("Token not exist",400));
@@ -295,18 +294,30 @@ const editDetails = asyncErrorWrapper(async(req,res,next) => {
 const deleteUser = asyncErrorWrapper(async(req,res,next) => {
     const password = req.body.password;
 
+    // user id öncesinde çalışan access to route ile geliyor (?)
     const userId = req.user.id;
 
-    console.log(userId);
-    const user = await User.findOne({_id : userId});
+    const user = await User.findById(userId).select("+password");
+
+    if(!user){
+        return next("something went wrong");
+    }
 
     const passwordDb = user.password;
+    
 
     if(!comparePassword(password,passwordDb)){
+
         return next(new CustomError("Passwords don't match"));
     }
 
-    User.deleteOne()
+    // beklemesi gerek
+    await User.deleteOne({_id : userId});
+
+    return res.status(200).json({
+        success : true,
+        message : "user deleted"
+    });
 
 });
 

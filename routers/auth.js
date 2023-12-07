@@ -31,7 +31,7 @@ router.post("/forgotpassword",forgotPassword);
 router.put("/resetpassword",resetPassword);
 router.post("/activate",activateAccount);
 
-router.delete("/deleteuser",getAccessToRoute,deleteUser);
+router.delete("/deleteuser",[getAccessToRoute,()=> console.log()],deleteUser);
 
 //* dummy func yine -- art arda iki response olmaz
 router.put("/edit",[getAccessToRoute,()=> console.log()],editDetails);

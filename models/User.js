@@ -145,11 +145,11 @@ UserSchema.pre("save",function(next){
 UserSchema.post("deleteOne",async function(){
     // Userdan eleman silindiğinde o elemanın tüm sorularıda gitsin -- user._id alacak ve question içindeki id ile kıyaslayacak
     //!bunun için baya uğraştım this.getQuery ile çektik ona göre
-    const user = this.getQuery();
+    const user = this.getQuery();       // get query js code u ben yazmadım
 
-    await Question.deleteMany({
-        user : user._id
-    });
+    // await Question.deleteMany({
+    //     user : user._id
+    // });
 
 });
 
