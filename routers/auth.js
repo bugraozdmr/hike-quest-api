@@ -8,7 +8,8 @@ const {
     editDetails,
     forgotPassword,
     resetPassword,
-    activateAccount
+    activateAccount,
+    deleteUser
 } = require("../controllers/auth");
 
 const {getAccessToRoute} = require("../middleWares/authorization/auth");
@@ -29,6 +30,8 @@ router.get("/logout",getAccessToRoute,logout);
 router.post("/forgotpassword",forgotPassword);
 router.put("/resetpassword",resetPassword);
 router.post("/activate",activateAccount);
+
+router.delete("/deleteuser",getAccessToRoute,deleteUser);
 
 //* dummy func yine -- art arda iki response olmaz
 router.put("/edit",[getAccessToRoute,()=> console.log()],editDetails);

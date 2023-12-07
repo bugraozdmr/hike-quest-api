@@ -37,6 +37,7 @@ const getAccessTokenFromHeader = (req) => {
     return access_token;
 }
 
+
 module.exports = {
     sendJwtToClient,
     isTokenIncluded,

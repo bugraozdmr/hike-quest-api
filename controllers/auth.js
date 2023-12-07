@@ -1,7 +1,7 @@
 //! loginde-register'da accesstoken güncellenir
 const User = require("../models/User");
 const asyncErrorWrapper = require("express-async-handler");
-const {sendJwtToClient} = require("../helpers/authorization/TokenHelpers");
+const {sendJwtToClient , getAccessTokenFromHeader} = require("../helpers/authorization/TokenHelpers");
 const CustomError = require("../helpers/error/customError");
 const {ValidateUserInput , comparePassword} = require("../helpers/input/inputHelpers");
 const sendEmail = require("../helpers/libraries/sendEmail");
@@ -292,6 +292,23 @@ const editDetails = asyncErrorWrapper(async(req,res,next) => {
 });
 
 
+const deleteUser = asyncErrorWrapper(async(req,res,next) => {
+    const password = req.body.password;
+
+    const userId = req.user.id;
+
+    console.log(userId);
+    const user = await User.findOne({_id : userId});
+
+    const passwordDb = user.password;
+
+    if(!comparePassword(password,passwordDb)){
+        return next(new CustomError("Passwords don't match"));
+    }
+
+    User.deleteOne()
+
+});
 
 
 
@@ -303,5 +320,6 @@ module.exports = {
     editDetails,
     forgotPassword,
     resetPassword,
-    activateAccount
+    activateAccount,
+    deleteUser
 };
