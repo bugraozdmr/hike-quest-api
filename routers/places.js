@@ -4,10 +4,11 @@ const router = express.Router();
 const {
     createPlace
 } = require("../controllers/places");
+const { getAccessToRoute , getAdminAccesToRoute } = require("../middleWares/authorization/auth");
 
 
 
-router.use("create",createPlace);
+router.post("/create",[getAccessToRoute,getAdminAccesToRoute],createPlace);
 
 
 

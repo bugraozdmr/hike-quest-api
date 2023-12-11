@@ -13,13 +13,14 @@ const register = asyncErrorWrapper(async(req,res,next) => {
     //postman test
     //  var object = pm.response.json();
     //  pm.environment.set("access_token", object.access_token);
-    const {name,surname,email,password} = req.body;
+    const {name,surname,email,password,role} = req.body;
     
     const user = await User.create({
         name,
         surname,
         email,
-        password
+        password,
+        role
     });
 
 

@@ -10,6 +10,11 @@ const createPlace = asyncErrorWrapper(async(req,res,next) => {
         city : city,
         county : county
     });
+
+    res.status(200).json({
+        success : true,
+        data : place
+    });
 });
 
 

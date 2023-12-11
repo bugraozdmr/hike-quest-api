@@ -54,7 +54,7 @@ PlacesSchema.pre("save",function(next) {
 
 // linki değiştirir slugify
 PlacesSchema.methods.makeSlug = function(){
-    return slugify(this.title,{
+    return slugify(this.name,{
         replacement : "-",
         remove : /[*+~.()'"!:@]/g,
         lower : true

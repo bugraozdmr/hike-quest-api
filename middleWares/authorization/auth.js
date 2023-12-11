@@ -30,6 +30,7 @@ const getAccessToRoute = (req,res,next) => {
             name:  decoded.name
         }
 
+        //! req.user.id burdan erişiliyor kemik bu
         next();
     });
 
@@ -54,9 +55,21 @@ const getAccessToRoute = (req,res,next) => {
 
 
 
+const getAdminAccesToRoute = asyncErrorWrapper(async(req,res,next) => {
+    // aklıma böyle kullanmak geldi
+    const userRole = (await User.findById(req.user.id)).role;
+
+    if(userRole != "admin"){
+        return next(new CustomError("Only admins can access this route",400));
+    }
+
+    next();
+});
+
+
 module.exports = {
     getAccessToRoute,
-    
+    getAdminAccesToRoute
     // getQuestionOwnerAccess,
     
 };
