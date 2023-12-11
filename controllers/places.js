@@ -17,8 +17,41 @@ const createPlace = asyncErrorWrapper(async(req,res,next) => {
     });
 });
 
+const deleteplace = asyncErrorWrapper(async(req,res,next) => {
+    const {id} = req.params;
+
+    await Places.findByIdAndDelete(id);
+
+    return res.status(200).json({
+        success : true,
+        message : "place deleted"
+    });
+});
+
+// params direkt /:id -- querry ?id= olurdu
+
+const editplace = asyncErrorWrapper(async(req,res,next) => {
+    const {id} = req.params;
+
+    const editInformation = req.body;
+
+    // yeniden oluştuma gibi düşün
+    const place = await Places.findOneAndUpdate({_id: id},editInformation,{
+        new : true,
+        runValidators : true
+    });
+
+    res.status(200).json({
+        success : true,
+        data : place
+    });
+
+});
+
 
 
 module.exports = {
-    createPlace
+    createPlace,
+    deleteplace,
+    editplace
 }
