@@ -7,6 +7,14 @@ const PlacesSchema = new Schema({
         type : String,
         required : ["true","please provide a place name"]
     },
+    city : {
+        type : String,
+        required : ["true","please provide a city name"]
+    },
+    county : {
+        type : String,
+        required : ["true","please provide a county name"]
+    },
     slug : {
         type : String
     },

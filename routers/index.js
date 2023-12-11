@@ -8,7 +8,7 @@ const places = require("./places");
 
 router.use("/auth",auth);
 
-router.use("places",places);
+router.use("/places",places);
 
 router.use("/", (req, res) => {
   res.json({
