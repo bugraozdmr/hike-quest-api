@@ -26,6 +26,16 @@ const PlacesSchema = new Schema({
         type : Number,
         default : 0
     },
+    dislikes : [
+        {
+        type : mongoose.Schema.ObjectId,
+        ref : "User"
+        }
+    ],
+    dislikeCount : {
+        type : Number,
+        default : 0
+    },
     createdAt : {
         type : Date,
         default : Date.now
