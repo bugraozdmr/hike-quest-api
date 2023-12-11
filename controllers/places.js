@@ -36,10 +36,14 @@ const editplace = asyncErrorWrapper(async(req,res,next) => {
     const editInformation = req.body;
 
     // yeniden oluştuma gibi düşün
-    const place = await Places.findOneAndUpdate({_id: id},editInformation,{
+    const place = await Places.findByIdAndUpdate(id,editInformation,{
         new : true,
         runValidators : true
     });
+
+    
+    //? slugify çalışsın diye save
+    place.save();
 
     res.status(200).json({
         success : true,

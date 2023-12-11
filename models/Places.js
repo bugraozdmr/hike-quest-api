@@ -53,21 +53,13 @@ PlacesSchema.pre("save",function(next) {
 });
 
 PlacesSchema.pre("save",function(next) {
-    if(!this.isModified("name")){
+    //* burda değişme olmasına rağmen değişmedi diyordu değişme oldu -- slug çalıştı
+    if(this.isModified("name")){
         next();
     }
     this.slug = this.makeSlug();
     next();
 });
-
-// todo -- slug ifadesi değişecek !!!!
-PlacesSchema.pre("findOneAndUpdate",async function(){
-    // Güncelleme öncesindeki belgeye ulaşmak için sorgu nesnesini al
-    const query = this.getQuery();
-    
-    console.log(query.name)
-});
-
 
 
 // linki değiştirir slugify
