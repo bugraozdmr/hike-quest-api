@@ -48,3 +48,7 @@ QuestionSchema.methods.makeSlug = function(){
         lower : true
     });
 };
+
+
+
+module.exports = mongoose.model("Places",PlacesSchema)
