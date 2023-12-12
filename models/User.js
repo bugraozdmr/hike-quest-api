@@ -50,6 +50,18 @@ const UserSchema = new Schema({
         type : String,
         default : "default.jpg"
     },
+    likedPlaces : [
+        {
+            type : mongoose.Schema.ObjectId,
+            ref : "Places"
+        }
+    ],
+    dislikedPlaces : [
+        {
+            type : mongoose.Schema.ObjectId,
+            ref : "Places"
+        }
+    ],
     createdAt: {
         type: Date,
         default: Date.now
@@ -150,7 +162,7 @@ UserSchema.post("deleteOne",async function(){
     // Userdan eleman silindiğinde o elemanın tüm sorularıda gitsin -- user._id alacak ve question içindeki id ile kıyaslayacak
     //!bunun için baya uğraştım this.getQuery ile çektik ona göre
     const user = this.getQuery();       // get query js code u ben yazmadım
-
+    // user silinirse likelarıda silinsin sorulardan
     // await Question.deleteMany({
     //     user : user._id
     // });

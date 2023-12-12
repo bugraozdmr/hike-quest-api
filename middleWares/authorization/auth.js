@@ -37,7 +37,7 @@ const getAccessToRoute = (req,res,next) => {
     next();
 }
 
-//todo burdan todo access yazılacak
+//todo burdan todo access yazılacak -- CommentOwnerAccessOlacak
 // const getQuestionOwnerAccess = asyncErrorWrapper(async(req,res,next) => {
 //     //! önce routeAccess çalışacak ondan -- req.user.id oluşmuş olacak
 //     const userID = req.user.id;
