@@ -79,12 +79,15 @@ const likePlace = asyncErrorWrapper(async(req,res,next) => {
 
     //todo
     if(place.dislikes.includes(req.user.id)){
-        console.log("worked2")
+        
         const index = place.dislikes.indexOf(req.user.id);
         
         // silme işlemi yapacak
         place.dislikes.splice(index,1);
         place.dislikeCount = place.dislikes.length;
+        //aşşağıda yazılamadı hata alıyordu
+        place.likes.push(req.user.id);
+        place.likeCount = place.likes.length;
 
         await place.save();
 
@@ -94,10 +97,19 @@ const likePlace = asyncErrorWrapper(async(req,res,next) => {
         const index2 = userToUse.dislikedPlaces.indexOf(id);
         // place id'si silinecek
         userToUse.dislikedPlaces.splice(index2,1);
+        //direkt eklesin yoksa hata alıyor altta
+        userToUse.likedPlaces.push(id);
+
+    
         // count yazılmadı burda gereksiz çünkü
         await userToUse.save();
+        
+        
 
-        //* dislike silincek ama devam ediyor -- çünkü asıl like eklenmeli
+        return res.status(200).json({
+            success : true,
+            message : "place liked"
+        });
     }
 
 
@@ -147,7 +159,7 @@ const dislikePlace = asyncErrorWrapper(async(req,res,next) => {
     const {id} = req.params;
 
     const place = await Places.findById(id);
-    const userToUse = await User.findById(req.user.id);
+    const userToUse = await User.findById(req.user.id).select('-password');
 
     if(!place){
         return next(CustomError("There is no place with given id",400));
@@ -157,13 +169,16 @@ const dislikePlace = asyncErrorWrapper(async(req,res,next) => {
     // todo burda bir helper yazılabilirdi like helper dislike helper şeklinde
     // öncesinde like attıysa o like gitmeli
     if(place.likes.includes(req.user.id)){
-        console.log("worked")
         const index = place.likes.indexOf(req.user.id);
         
         // silme işlemi yapacak
         place.likes.splice(index,1);
         place.likeCount = place.likes.length;
-
+        
+        //! iki işlemde burda yaptı çünkü aşağıda user işlemi yaparken hata fırlatıyor çözemedim.Çözüm bu
+        place.dislikes.push(req.user.id);
+        place.dislikeCount = place.dislikes.length;
+        
         await place.save();
 
         
@@ -174,9 +189,14 @@ const dislikePlace = asyncErrorWrapper(async(req,res,next) => {
         // place id'si silinecek
         userToUse.likedPlaces.splice(index2,1);
         // count yazılmadı burda gereksiz çünkü
-
+        userToUse.dislikedPlaces.push(id);
         await userToUse.save();
-        //* like silincek ama devam ediyor -- çünkü asıl dislike eklenmeli
+        
+
+        return res.status(200).json({
+            success : true,
+            message : "place disliked"
+        });
     }
     
 
@@ -193,7 +213,7 @@ const dislikePlace = asyncErrorWrapper(async(req,res,next) => {
         
 
         //? user işlemleri
-        const index2 = userToUse.dislikedPlaces.indexOf(id)
+        const index2 = userToUse.dislikedPlaces.indexOf(id);
         userToUse.dislikedPlaces.splice(index2,1);
         userToUse.save();
 
@@ -210,11 +230,14 @@ const dislikePlace = asyncErrorWrapper(async(req,res,next) => {
     await place.save();
 
 
-    
     //? user işlemleri
-    userToUse.dislikedPlaces.push(id);
-    await userToUse.save();
+    // silmeye siliyor ancak eklemiyor sonra dislike'ı
+    
 
+    userToUse.dislikedPlaces.push(id);
+    
+    await userToUse.save();
+    
     return res.status(200).json({
         success : true,
         message : "place disliked"
