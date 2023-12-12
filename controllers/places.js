@@ -66,11 +66,13 @@ const showPlaces = asyncErrorWrapper(async(req,res,next) => {
 const likePlace = asyncErrorWrapper(async(req,res,next) => {
     const {id} = req.params;
 
-    const place = Places.findById(id);
+    // await unutma
+    const place = await Places.findById(id);
 
     if(!place){
         return next(CustomError("There is no place with given id",400));
     }
+
 
     if(place.dislikes.includes(req.user.id)){
         const index = place.dislikes.indexOf(req.user.id);
@@ -116,7 +118,7 @@ const likePlace = asyncErrorWrapper(async(req,res,next) => {
 const dislikePlace = asyncErrorWrapper(async(req,res,next) => {
     const {id} = req.params;
 
-    const place = Places.findById(id);
+    const place = await Places.findById(id);
 
     if(!place){
         return next(CustomError("There is no place with given id",400));
