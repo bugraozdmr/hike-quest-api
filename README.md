@@ -5,9 +5,9 @@
 In order to use postman and jwt you should define these in postman headers:
 
 <h3>Key</h3>
-<h4>Authorization</h4>
+<p>Authorization</p>
 
 <h3>Value</h3>
-<h4>Bearer: {access_token}</h4>
+<p>Bearer: {access_token}</p>
 
 For access token when user logged in token should created and with postman codes it should saved at  in the postman env. 
