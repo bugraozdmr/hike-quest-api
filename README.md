@@ -1,5 +1,5 @@
 ﻿# hike-quest-api
-<h2>express / node</h2>
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) 
 
 
 In order to use postman and jwt you should define these in postman headers:
