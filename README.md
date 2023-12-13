@@ -1,11 +1,11 @@
 ﻿# hike-quest-api
-<h4>express / node</h4>
+<h2>express / node</h2>
 
 
 In order to use postman and jwt you should define these in postman headers:
 
-Key
-Authorization
+<h3>Key</h3>
+<h4>Authorization</h4>
 
-Value
-Bearer: {access_token} 
+<h3>Value</h3>
+<h4>Bearer: {access_token}</h4>
