@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-
+const Places = require("./Places");
 
 const UserSchema = new Schema({
     name : {
@@ -160,12 +160,25 @@ UserSchema.pre("save",function(next){
 
 UserSchema.post("deleteOne",async function(){
     // Userdan eleman silindiğinde o elemanın tüm sorularıda gitsin -- user._id alacak ve question içindeki id ile kıyaslayacak
-    //!bunun için baya uğraştım this.getQuery ile çektik ona göre
+    //!bunun için baya uğraştım this.getQuery ile çektik ona göre -- getquery işlem öncesi user
     const user = this.getQuery();       // get query js code u ben yazmadım
-    // user silinirse likelarıda silinsin sorulardan
-    // await Question.deleteMany({
-    //     user : user._id
-    // });
+    // user silinirse likelarıda silinsin placeden
+
+    //* document'lerde vardır muhtemelen ancak -- gpt yazdı
+    await Places.updateMany(
+        { likes: user._id },
+        {
+        $pull: { likes: user._id },
+        $inc: { likeCount: -1 } // likes_count'i azalt
+        }
+    );
+    await Places.updateMany(
+        { dislikes: user._id },
+        {
+        $pull: { dislikes: user._id },
+        $inc: { dislikeCount: -1 } // likes_count'i azalt
+        }
+    );
 
 });
 
