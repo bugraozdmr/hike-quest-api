@@ -25,7 +25,7 @@ router.post("/register",register);
 router.get("/getAllUser",getAllUser);
 router.post("/login",login);
 // getAccessToRouter login olmuşmuyuz durumunu kontrol eder
-router.get("/logout",getAccessToRoute,logout);
+
 
 router.post("/forgotpassword",forgotPassword);
 router.put("/resetpassword",resetPassword);
@@ -35,5 +35,7 @@ router.delete("/deleteuser",[getAccessToRoute,()=> console.log()],deleteUser);
 
 //* dummy func yine -- art arda iki response olmaz
 router.put("/edituser",[getAccessToRoute,()=> console.log()],editDetails);
+
+router.get("/logout",[getAccessToRoute,()=> console.log()],logout);
 
 module.exports = router;
