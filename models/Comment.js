@@ -17,6 +17,12 @@ const CommentSchema = new Schema({
         type : mongoose.Schema.ObjectId,
         ref : "Places"
     },
+    likes : [
+        {
+            type : mongoose.Schema.ObjectId,
+            ref : "User"
+        }
+    ],
     likeCount : {
         type : Number,
         default : 0
@@ -27,10 +33,6 @@ const CommentSchema = new Schema({
     }
 });
 
-CommentSchema.pre("save",function(next) {
-    
-    next();
-});
 
 //! exportS için 20dk bakındım -- sonra func yok hatası alırız
 module.exports = mongoose.model("Comment",CommentSchema);

@@ -111,10 +111,41 @@ const showAll = asyncErrorWrapper(async(req,res,next) => {
     });
 });
 
+const likeComment = asyncErrorWrapper(async(req,res,next) => {
+    const {id} = req.params;
+
+    const comment = await Comment.findById(id);
+
+    if(comment.likes.includes(req.user.id)){
+        const index = comment.likes.indexOf(req.user.id);
+
+        comment.likes.splice(index);
+
+        comment.likeCount = comment.likes.length;    
+
+        comment.save();
+        //return yoksa devam eder hata alır
+        return res.status(200).json({
+            success : true,
+            message : "like removed from comment"
+        });
+    }
+
+
+    comment.likes.push(req.user.id);
+    comment.likeCount = comment.likes.length;
+    comment.save();
+
+    res.status(200).json({
+        success : true,
+        message : "liked comment"
+    });
+});
 
 module.exports = {
     createComment,
     deleteComment,
     editComment,
-    showAll
+    showAll,
+    likeComment
 }

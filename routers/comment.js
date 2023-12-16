@@ -4,7 +4,8 @@ const {
     createComment,
     deleteComment,
     editComment,
-    showAll
+    showAll,
+    likeComment
 } = require("../controllers/comment");
 
 const {getAccessToRoute,
@@ -24,6 +25,7 @@ router.post("/commentplace/:id",[getAccessToRoute,logFunction],createComment);
 router.put("/edit/:id",[getAccessToRoute,getCommentOwnerAccesToRoute,logFunction],editComment);
 router.delete("/delete/:id",[getAccessToRoute,getCommentOwnerAccesToRoute,logFunction],deleteComment);
 router.get("/show",showAll);
-
+// comment id bu
+router.post("/likecomment/:id",[getAccessToRoute,logFunction],likeComment)
 
 module.exports = router;
