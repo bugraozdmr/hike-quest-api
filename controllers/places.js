@@ -229,7 +229,7 @@ const dislikePlace = asyncErrorWrapper(async(req,res,next) => {
 
 
     //? user işlemleri
-    // silmeye siliyor ancak eklemiyor sonra dislike'ı
+
     
 
     userToUse.dislikedPlaces.push(id);
@@ -256,7 +256,7 @@ const addToFavourite = asyncErrorWrapper(async(req,res,next) => {
     //* varsa geri çeksin
     if(place.favouriteUsers.includes(req.user.id)){
         const index = place.favouriteUsers.indexOf(req.user.id);
-        place.favouritePlaces.splice(index,1);
+        place.favouriteUsers.splice(index,1);
 
         await place.save();
 
@@ -286,6 +286,7 @@ const addToFavourite = asyncErrorWrapper(async(req,res,next) => {
         }
     })
 });
+
 
 
 
