@@ -62,6 +62,12 @@ const UserSchema = new Schema({
             ref : "Places"
         }
     ],
+    favouritePlaces : [
+        {
+            type : mongoose.Schema.ObjectId,
+            ref : "Places"
+        }
+    ],
     createdAt: {
         type: Date,
         default: Date.now

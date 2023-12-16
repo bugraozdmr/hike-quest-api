@@ -7,7 +7,8 @@ const {
     editplace,
     showPlaces,
     dislikePlace,
-    likePlace
+    likePlace,
+    addToFavourite
 } = require("../controllers/places");
 const { getAccessToRoute , getAdminAccesToRoute } = require("../middleWares/authorization/auth");
 
@@ -19,5 +20,6 @@ router.put("/edit/:id",[getAccessToRoute,getAdminAccesToRoute,()=>console.log()]
 router.get("/getplaces",showPlaces);
 router.post("/dislikeplace/:id",[getAccessToRoute,()=>console.log()],dislikePlace);
 router.post("/likeplace/:id",[getAccessToRoute,()=>console.log()],likePlace);
+router.post("/addfavourite/:id",[getAccessToRoute,()=>console.log()],addToFavourite);
 
 module.exports = router;

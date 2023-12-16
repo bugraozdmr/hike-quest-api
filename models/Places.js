@@ -18,6 +18,12 @@ const PlacesSchema = new Schema({
     slug : {
         type : String
     },
+    favouriteUsers : [
+        {
+            type : mongoose.Schema.ObjectId,
+            ref : "User"
+        }
+    ],
     likes : [
         {
         type : mongoose.Schema.ObjectId,

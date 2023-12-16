@@ -153,7 +153,6 @@ const likePlace = asyncErrorWrapper(async(req,res,next) => {
     });
 });
 
-// todo -- places çalışıyor ancak user çalışmıyor
 
 const dislikePlace = asyncErrorWrapper(async(req,res,next) => {
     const {id} = req.params;
@@ -202,7 +201,6 @@ const dislikePlace = asyncErrorWrapper(async(req,res,next) => {
 
     // dislike tekrar basarsa dislike silinsin
     if(place.dislikes.includes(req.user.id)){
-        
         const index = place.dislikes.indexOf(req.user.id);
         
         place.dislikes.splice(index,1);
@@ -245,11 +243,58 @@ const dislikePlace = asyncErrorWrapper(async(req,res,next) => {
 });
 
 
+const addToFavourite = asyncErrorWrapper(async(req,res,next) => {
+    const {id} = req.params;
+    // user bulunur zaten getaccessroute'dan geliyor
+    const user = await User.findById(req.user.id);
+    const place = await Places.findById(id);
+
+    if(!place){
+        return next(new CustomError("There is no place has that id"));
+    }
+
+    //* varsa geri çeksin
+    if(place.favouriteUsers.includes(req.user.id)){
+        const index = place.favouriteUsers.indexOf(req.user.id);
+        place.favouritePlaces.splice(index,1);
+
+        await place.save();
+
+        const index2 = user.favouritePlaces.indexOf(id);
+        user.favouritePlaces.splice(index2,1);
+
+        await user.save();
+
+
+        return res.status(200).json({
+            success : true,
+            message : "deleted from favourites"
+        });
+    }
+
+    place.favouriteUsers.push(req.user.id);
+    await place.save();
+
+    user.favouritePlaces.push(id);
+    await user.save();
+
+    return res.status(200).json({
+        success : true,
+        message : "place added to favourites",
+        data : {
+            place_name : place.name
+        }
+    })
+});
+
+
+
 module.exports = {
     createPlace,
     deleteplace,
     editplace,
     showPlaces,
     dislikePlace,
-    likePlace
+    likePlace,
+    addToFavourite
 }
