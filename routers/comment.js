@@ -1,14 +1,18 @@
 const express = require("express");
 
+const {
+    createComment
+} = require("../controllers/comment");
+
 const {getAccessToRoute} = require("../middleWares/authorization/auth");
 
 const router = express.Router();
 
 
-router.use("/create",[getAccessToRoute,()=>console.log()],);
-router.use("/edit",);
-router.use("/delete",);
-router.use("/show",);
+router.post("/create",[getAccessToRoute,()=>console.log()],createComment);
+router.put("/edit",);
+router.delete("/delete",);
+router.get("/show",);
 
 
 

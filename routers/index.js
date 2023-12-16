@@ -3,6 +3,7 @@ const router = express.Router();
 
 const auth = require("./auth");
 const places = require("./places");
+const comment = require("./comment");
 
 
 
@@ -10,6 +11,7 @@ router.use("/auth",auth);
 
 router.use("/places",places);
 
+router.use("/comment",comment);
 
 router.use("/kubmud",(req,res) => {
   const {KUBMUD_STR} = process.env;
