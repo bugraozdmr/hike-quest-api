@@ -9,7 +9,7 @@ const {getAccessToRoute} = require("../middleWares/authorization/auth");
 const router = express.Router();
 
 
-router.post("/create",[getAccessToRoute,()=>console.log()],createComment);
+router.post("/create/:id",[getAccessToRoute,()=>console.log()],createComment);
 router.put("/edit",);
 router.delete("/delete",);
 router.get("/show",);
