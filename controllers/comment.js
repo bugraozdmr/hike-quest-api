@@ -27,7 +27,7 @@ const createComment = asyncErrorWrapper(async(req,res,next) => {
 
     //? places'da işlemler
 
-    place.comments.push(id);
+    place.comments.push(comment.id);
     place.save();
 
     user.comments.push(comment.id);
@@ -42,21 +42,33 @@ const createComment = asyncErrorWrapper(async(req,res,next) => {
     });
 });
 
+
+//? comment silinince user-comment-place'den silinir toplu --
+
 const deleteComment = asyncErrorWrapper(async(req,res,next) => {
     const {id} = req.params;
-
+ 
     const placeId = (await Comment.findById(id)).place;
-    const userId = (await Comment.findById(id)).user;
+    // User paremetre buyuk harfliymis
+    const userId = (await Comment.findById(id)).User;
 
     const place = await Places.findById(placeId);
     const user = await User.findById(userId);
+
+    if(!user){
+        return next(new CustomError("user not exist"));
+    }
+
+    if(!place){
+        return next(new CustomError("place not exist"));
+    }
 
     const index = place.comments.indexOf(id);
     place.comments.splice(index,1);
     place.save();
 
     const index2 = user.comments.indexOf(id);
-    user.comments.splice(index,1);
+    user.comments.splice(index2,1);
     user.save();
 
     //* en son silme işlemini yap
@@ -74,8 +86,8 @@ const editComment = asyncErrorWrapper(async(req,res,next) => {
     const {id} = req.params;
 
     const editInformation = req.body;
-
-    const comment = Comment.findByIdAndUpdate(id,editInformation,{
+    // await !
+    const comment = await Comment.findByIdAndUpdate(id,editInformation,{
         new : true,
         runValidators : true
     });
@@ -92,7 +104,7 @@ const editComment = asyncErrorWrapper(async(req,res,next) => {
 });
 
 const showAll = asyncErrorWrapper(async(req,res,next) => {
-    const comments = Comment.find();
+    const comments = await Comment.find();
 
     res.status(200).json({
         data : comments

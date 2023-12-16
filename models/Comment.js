@@ -27,5 +27,10 @@ const CommentSchema = new Schema({
     }
 });
 
+CommentSchema.pre("save",function(next) {
+    
+    next();
+});
+
 //! exportS için 20dk bakındım -- sonra func yok hatası alırız
 module.exports = mongoose.model("Comment",CommentSchema);

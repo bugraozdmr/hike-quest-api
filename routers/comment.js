@@ -17,7 +17,7 @@ const router = express.Router();
 
 const logFunction = () => console.log();
 
-
+//? createComment -- placeid alır -- delete ve edit comment id alır
 
 //* create commentte place id alır -- diğerlerinde commentid
 router.post("/commentplace/:id",[getAccessToRoute,logFunction],createComment);
