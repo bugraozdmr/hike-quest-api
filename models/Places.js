@@ -50,6 +50,7 @@ const PlacesSchema = new Schema({
     }
 });
 
+// todo look -- bak buraya çifte eklenmiş
 PlacesSchema.pre("save",function(next) {
     if(!this.isModified("name")){
         next();

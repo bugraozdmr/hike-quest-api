@@ -10,6 +10,13 @@ const CommentSchema = new Schema({
         type : mongoose.Schema.ObjectId,
         ref : "User"
     },
+    username : {
+        type : String
+    },
+    place : {
+        type : mongoose.Schema.ObjectId,
+        ref : "Places"
+    },
     likeCount : {
         type : Number,
         default : 0
@@ -20,4 +27,5 @@ const CommentSchema = new Schema({
     }
 });
 
-module.export = mongoose.model("Comment",CommentSchema);
+//! exportS için 20dk bakındım
+module.exports = mongoose.model("Comment",CommentSchema);
