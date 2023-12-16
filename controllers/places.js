@@ -1,7 +1,7 @@
 const Places = require("../models/Places");
 const User = require("../models/User");
 const asyncErrorWrapper = require("express-async-handler");
-const customError = require("../helpers/error/customError");
+// const customError = require("../helpers/error/customError");
 const CustomError = require("../helpers/error/customError");
 
 const createPlace = asyncErrorWrapper(async(req,res,next) => {

@@ -10,6 +10,7 @@ router.use("/auth",auth);
 
 router.use("/places",places);
 
+
 router.use("/kubmud",(req,res) => {
   const {KUBMUD_STR} = process.env;
   res.status(200).json({
@@ -17,6 +18,7 @@ router.use("/kubmud",(req,res) => {
   });
 });
 
+// yukardakilere girmezse en alttaki çalışır
 router.use("/", (req, res) => {
   res.json({
       message : "api access only for devs"

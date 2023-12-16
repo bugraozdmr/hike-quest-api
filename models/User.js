@@ -68,6 +68,12 @@ const UserSchema = new Schema({
             ref : "Places"
         }
     ],
+    comments : [
+        {
+            type : mongoose.Schema.ObjectId,
+            ref : "Comment"
+        }
+    ],
     createdAt: {
         type: Date,
         default: Date.now
