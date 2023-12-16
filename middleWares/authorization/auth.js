@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const {isTokenIncluded,getAccessTokenFromHeader} = require("../../helpers/authorization/TokenHelpers");
 const asyncErrorWrapper = require("express-async-handler");
 const User = require("../../models/User");
-
+const Comment = require("../../models/Comment");
 
 const getAccessToRoute = (req,res,next) => {
     //* gönderilen değer yani auth.. - bearer.. bu ikisi request oluyorlar
@@ -56,7 +56,17 @@ const getAccessToRoute = (req,res,next) => {
 const getCommentOwnerAccesToRoute = asyncErrorWrapper(async(req,res,next) => {
     const {id} = req.params;
 
-    if(req.user.id != id){
+    const comment = await Comment.findById(id);
+
+    if(!comment){
+        return next(new CustomError("Comment not exist",400));
+    }
+
+
+    const commentUserId = comment.User;
+
+
+    if(req.user.id != commentUserId){
         return next(new CustomError("Only owner can delete comment",400));
     }
 
@@ -78,7 +88,6 @@ const getAdminAccesToRoute = asyncErrorWrapper(async(req,res,next) => {
 
 module.exports = {
     getAccessToRoute,
-    getAdminAccesToRoute
-    // getQuestionOwnerAccess,
-    
+    getAdminAccesToRoute,
+    getCommentOwnerAccesToRoute    
 };

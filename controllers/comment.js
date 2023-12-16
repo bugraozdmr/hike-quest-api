@@ -12,6 +12,7 @@ const createComment = asyncErrorWrapper(async(req,res,next) => {
     const {id} = req.params;
 
     const place = await Places.findById(id);
+    const user = await User.findById(req.user.id);
 
     if(!place){
         return next(new CustomError("Place does not exist",400));
@@ -29,6 +30,9 @@ const createComment = asyncErrorWrapper(async(req,res,next) => {
     place.comments.push(id);
     place.save();
 
+    user.comments.push(comment.id);
+    user.save();
+
     return res.status(200).json({   
         success : true,
         data : {
@@ -41,7 +45,24 @@ const createComment = asyncErrorWrapper(async(req,res,next) => {
 const deleteComment = asyncErrorWrapper(async(req,res,next) => {
     const {id} = req.params;
 
+    const placeId = (await Comment.findById(id)).place;
+    const userId = (await Comment.findById(id)).user;
+
+    const place = await Places.findById(placeId);
+    const user = await User.findById(userId);
+
+    const index = place.comments.indexOf(id);
+    place.comments.splice(index,1);
+    place.save();
+
+    const index2 = user.comments.indexOf(id);
+    user.comments.splice(index,1);
+    user.save();
+
+    //* en son silme işlemini yap
     await Comment.findByIdAndDelete(id);
+ 
+
 
     return res.status(200).json({
         success : true,
