@@ -27,5 +27,5 @@ const CommentSchema = new Schema({
     }
 });
 
-//! exportS için 20dk bakındım
+//! exportS için 20dk bakındım -- sonra func yok hatası alırız
 module.exports = mongoose.model("Comment",CommentSchema);
