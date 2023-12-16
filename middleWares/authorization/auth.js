@@ -53,6 +53,15 @@ const getAccessToRoute = (req,res,next) => {
 //     next();
 // });
 
+const getCommentOwnerAccesToRoute = asyncErrorWrapper(async(req,res,next) => {
+    const {id} = req.params;
+
+    if(req.user.id != id){
+        return next(new CustomError("Only owner can delete comment",400));
+    }
+
+    next();
+});
 
 
 const getAdminAccesToRoute = asyncErrorWrapper(async(req,res,next) => {

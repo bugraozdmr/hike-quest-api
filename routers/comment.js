@@ -1,21 +1,29 @@
 const express = require("express");
 
 const {
-    createComment
+    createComment,
+    deleteComment,
+    editComment,
+    showAll
 } = require("../controllers/comment");
 
-const {getAccessToRoute} = require("../middleWares/authorization/auth");
+const {getAccessToRoute,
+    getCommentOwnerAccesToRoute
+} = require("../middleWares/authorization/auth");
 
 const router = express.Router();
 
-// bu burda olmaz
-router.post("/commentplace/:id",[getAccessToRoute,()=>console.log()],createComment);
-router.put("/edit",);
-router.delete("/delete",);
-router.get("/show",);
+
+
+const logFunction = () => console.log();
 
 
 
+//* create commentte place id alır -- diğerlerinde commentid
+router.post("/commentplace/:id",[getAccessToRoute,logFunction],createComment);
+router.put("/edit/:id",[getAccessToRoute,getCommentOwnerAccesToRoute,logFunction],editComment);
+router.delete("/delete/:id",[getAccessToRoute,getCommentOwnerAccesToRoute,logFunction],deleteComment);
+router.get("/show",showAll);
 
 
 module.exports = router;

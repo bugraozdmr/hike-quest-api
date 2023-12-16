@@ -38,12 +38,50 @@ const createComment = asyncErrorWrapper(async(req,res,next) => {
     });
 });
 
+const deleteComment = asyncErrorWrapper(async(req,res,next) => {
+    const {id} = req.params;
+
+    await Comment.findByIdAndDelete(id);
+
+    return res.status(200).json({
+        success : true,
+        message : "comment deleted"
+    });
+});
 
 const editComment = asyncErrorWrapper(async(req,res,next) => {
-    
+    const {id} = req.params;
+
+    const editInformation = req.body;
+
+    const comment = Comment.findByIdAndUpdate(id,editInformation,{
+        new : true,
+        runValidators : true
+    });
+
+    comment.save();
+
+    return res.status(200).json({
+        success : true,
+        message : "comment edited",
+        data : {
+            content : comment.content
+        }
+    });
+});
+
+const showAll = asyncErrorWrapper(async(req,res,next) => {
+    const comments = Comment.find();
+
+    res.status(200).json({
+        data : comments
+    });
 });
 
 
 module.exports = {
-    createComment
+    createComment,
+    deleteComment,
+    editComment,
+    showAll
 }
